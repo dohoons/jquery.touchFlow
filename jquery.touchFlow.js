@@ -72,6 +72,10 @@
 			this.list = this.wrap.children();
 			this.state = false;
 			
+			if(typeof(this.opts.page) == "string") {
+				this.opts.page = $(this.target).find(this.opts.page).eq(0).index();
+			}
+			
 			this.set_limit();
 			this.go_page(this.opts.page);
 			
@@ -367,7 +371,7 @@
 		
 		posX : function (val) {
 			if(val) {
-				var to = this.get_limit({x:-val});
+				var to = this.get_limit({x:val});
 				if(val == "first") {
 					to = 0;
 				} else if(val == "last") {
@@ -375,13 +379,15 @@
 				}
 				clearInterval(this.ticker);
 				this.set_pos({x:to}, this.duration);
+				
+				return false;
 			}
 			return this.list.position().left;
 		},
 		
 		posY : function (val) {
 			if(val) {
-				var to = this.get_limit({y:-val});
+				var to = this.get_limit({y:val});
 				if(val == "first") {
 					to = 0;
 				} else if(val == "last") {
@@ -397,8 +403,8 @@
 			return {
 				obj : this,
 				target : this.target,
-				posX : -this.posX(),
-				posY : -this.posY()
+				posX : this.posX(),
+				posY : this.posY()
 			}
 		}
 	};
@@ -406,11 +412,7 @@
 	$.fn.touchFlow = function (settings) {
 		return this.each(function () {
 			if (!$.data(this, 'touchFlow')) {
-				var opts = $.extend({}, settings);
-				if(typeof(opts.page) == "string") {
-					opts.page = $(this).find(opts.page).eq(0).index();
-				}
-				$.data(this, 'touchFlow', new TouchFlow( this, opts ));
+				$.data(this, 'touchFlow', new TouchFlow( this, settings ));
 			}
 		});
 	};
