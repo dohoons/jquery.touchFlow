@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi">
+
+<meta property="og:author" content="dohoons">
+<meta property="og:title" content="Touch Overflow Scroller">
+<meta property="og:description" content="수평or수직 터치스크롤 내비게이션">
+<meta property="og:image" content="">
+
+<title>Touch Overflow Scroller</title>
+<link rel="stylesheet" href="common.css">
+<style>
+@media screen and (min-width:768px){
+	body { width:50%; margin:0 auto; }
+}
+h1 { font-size:16px; font-weight:bold; }
+h2 { margin-top:10px; text-align:center; }
+button { padding:10px; font-size:11px; color:#fff; background:#444; border-radius:4px; } 
+
+.nav_h_responsive_type { background:#ccc; position:relative; overflow:hidden; }
+.nav_h_responsive_type ul { display:block; font-size:0; white-space:nowrap; position:relative; }
+.nav_h_responsive_type li { -webkit-box-sizing:border-box; box-sizing:border-box; display:inline-block; width:30%; vertical-align:top; border:1px solid #ccc; }
+.nav_h_responsive_type li.on { background:#aaa; font-weight:bold; }
+.nav_h_responsive_type li .thumb { display:block; height:0; padding-top:56%; position:relative; overflow:hidden; }
+.nav_h_responsive_type li img { display:block; width:100%; height:100%; position:absolute; top:0; left:0; }
+
+.nav_h_type { background:#ccc; position:relative; overflow:hidden; }
+.nav_h_type ul { float:left; display:block; font-size:0; white-space:nowrap; position:relative; }
+.nav_h_type li { -webkit-box-sizing:border-box; box-sizing:border-box; display:inline-block; width:100px; height:100px; line-height:100px; vertical-align:top; text-align:center; font-size:12px; background:#eee; border:1px solid #ccc; }
+.nav_h_type li.on { background:#aaa; font-weight:bold; }
+
+.nav_v_type { width:200px; height:200px; margin:0 auto; background:#ccc; position:relative; overflow:hidden; }
+.nav_v_type ul { display:block; position:relative; }
+.nav_v_type li { -webkit-box-sizing:border-box; box-sizing:border-box; display:block; width:100%; height:25px; line-height:25px; text-align:center; font-size:12px; background:#eee; border:1px solid #ccc; }
+.nav_v_type li.on { background:#aaa; font-weight:bold; }
+</style>
+<script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="jquery.touchFlow.js"></script>
+<script>
+//<![CDATA[
+$(document).ready(function() {
+	
+	// 1 : default(axis x). responsive(using css), callback test
+	$("#touchFlow").touchFlow({
+		initComplete : function (e) {
+			$("#throw_nav_debug").prepend('touchFlow init !!<br>');
+		},
+		stopped : function (e) {
+			$("#throw_nav_debug").prepend('touchFlow stopped. posX : ' + e.posX + ' !!<br>');
+		},
+		resizeend : function (e) {
+			$("#throw_nav_debug").prepend('Window resizeend. listW : ' + this.listw + ' !!<br>');
+		}
+	});
+	
+	$(".btn_first").on("click", function (e) {
+		$("#touchFlow").data("touchFlow").posX("first");
+	});
+	$(".btn_last").on("click", function (e) {
+		$("#touchFlow").data("touchFlow").posX("last");
+	});
+	$(".btn_to230").on("click", function (e) {
+		$("#touchFlow").data("touchFlow").posX(230);
+	});
+	
+	// 2 : axis:x, page:'li.on' index
+	$("#touchFlow2").touchFlow({
+		axis : "x",
+		page : $("#touchFlow2 li.on").index()
+	});
+	
+	// 3 : axis:y, page:selector string
+	$("#touchFlow3").touchFlow({
+		axis : "y",
+		page : "li.on"
+	});
+	
+	// 4 : axis:x, apply to multiple elements
+	$(".nav_h_list").touchFlow({
+		axis : "x",
+		page : "li.on"
+	});
+});
+//]]>
+</script>
+</head>
+
+<body>
+<h1>Touch Overflow Scroller (jQuery.touchFlow, dohoons)</h1>
+<p>수평or수직 터치스크롤 내비게이션. 터치스크린에서만 동작</p>
+<p><a href="https://github.com/dohoons/jquery.touchFlow" target="_blank">https://github.com/dohoons/jquery.touchFlow</a></p>
+
+
+<h2>1 : default(axis x). responsive(using css), callback test</h2>
+<div id="touchFlow" class="nav_h_responsive_type">
+	<ul>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
+	</ul>
+</div>
+<div style="padding:10px 0;">
+	<button type="button" class="btn_first">posX("first");</button>
+	<button type="button" class="btn_last">posX("last");</button>
+	<button type="button" class="btn_to230">posX(230);</button>
+</div>
+callback log :
+<div id="throw_nav_debug" style="border:1px solid #ccc; height:50px; line-height:1; font-size:11px; overflow:scroll; overflow-x:hidden;"></div>
+
+<h2>2 : axis:x, page:'li.on' index</h2>
+<div id="touchFlow2" class="nav_h_type">
+	<ul>
+		<li>contents 1</li>
+		<li>contents 2</li>
+		<li>contents 3</li>
+		<li>contents 4</li>
+		<li>contents 5</li>
+		<li class="on">contents 6</li>
+		<li>contents 7</li>
+		<li>contents 8</li>
+		<li>contents 9</li>
+		<li>contents 10</li>
+		<li>contents 11</li>
+		<li>contents 12</li>
+		<li>contents 13</li>
+		<li>contents 14</li>
+		<li>contents 15</li>
+		<li>contents 16</li>
+		<li>contents 17</li>
+		<li>contents 18</li>
+		<li>contents 19</li>
+		<li>contents 20</li>
+	</ul>
+</div>
+
+<h2>3 : axis:y, page:selector string</h2>
+<div id="touchFlow3" class="nav_v_type">
+	<ul>
+		<li>contents 1</li>
+		<li>contents 2</li>
+		<li class="on">contents 3</li>
+		<li>contents 4</li>
+		<li>contents 5</li>
+		<li>contents 6</li>
+		<li>contents 7</li>
+		<li>contents 8</li>
+		<li>contents 9</li>
+		<li>contents 10</li>
+		<li>contents 11</li>
+		<li>contents 12</li>
+		<li>contents 13</li>
+		<li>contents 14</li>
+		<li>contents 15</li>
+		<li>contents 16</li>
+		<li>contents 17</li>
+		<li>contents 18</li>
+		<li>contents 19</li>
+		<li>contents 20</li>
+	</ul>
+</div>
+
+<h2>4 : axis:x, apply to multiple elements</h2>
+<div class="nav_h_type nav_h_list">
+	<ul>
+		<li>contents 1</li>
+		<li>contents 2</li>
+		<li>contents 3</li>
+		<li>contents 4</li>
+		<li>contents 5</li>
+		<li class="on">contents 6</li>
+		<li>contents 7</li>
+		<li>contents 8</li>
+		<li>contents 9</li>
+		<li>contents 10</li>
+	</ul>
+</div>
+<div class="nav_h_type nav_h_list">
+	<ul>
+		<li>contents 1</li>
+		<li class="on">contents 2</li>
+		<li>contents 3</li>
+		<li>contents 4</li>
+		<li>contents 5</li>
+		<li>contents 6</li>
+		<li>contents 7</li>
+		<li>contents 8</li>
+		<li>contents 9</li>
+		<li>contents 10</li>
+	</ul>
+</div>
+<div class="nav_h_type nav_h_list">
+	<ul>
+		<li>contents 1</li>
+		<li>contents 2</li>
+		<li>contents 3</li>
+		<li>contents 4</li>
+		<li>contents 5</li>
+		<li>contents 6</li>
+		<li>contents 7</li>
+		<li>contents 8</li>
+		<li class="on">contents 9</li>
+		<li>contents 10</li>
+	</ul>
+</div>
+
+</body>
+</html>
