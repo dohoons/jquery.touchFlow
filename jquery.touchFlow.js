@@ -2,14 +2,14 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.0.1
+ * @version	1.0.2
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
  *		axis				-	드래그 방향 (String, default "x")
  *		page				-	초기 페이지 (Number or String, default 0)
  *		speed				-	애니메이션 속도 (Number, default 200)
- *		initComplete 		-	초기화 콜백 (Function, default null)
+ *		initComplete		-	초기화 콜백 (Function, default null)
  *		stopped				-	정지 콜백 (Function, default null)
  *		resizeend			-	윈도우 리사이즈 콜백 (Function, default null)
  *
@@ -21,6 +21,9 @@
 	
 	$("#target").data("touchFlow").go_page(4);
 */
+
+/*jslint browser: true*/
+/*global jQuery*/
 
 ;(function ($) {
 	
@@ -39,12 +42,12 @@
 		this.target = el;
 		this.wrap = $(el);
 		this.list = this.wrap.children();
-		this.wrapw;
-		this.wraph;
-		this.listw;
-		this.listh;
-		this.tmp;
-		this.ticker;
+		this.wrapw = null;
+		this.wraph = null;
+		this.listw = null;
+		this.listh = null;
+		this.tmp = null;
+		this.ticker = null;
 		this.duration = this.opts.speed;
 		this.delay = 27;
 		this.posx = 0;
@@ -61,7 +64,7 @@
 		this.bottom = 0;
 		this.state = false;
 		this.link = true;
-		this.lastmove;
+		this.lastmove = null;
 		
 		this.init();
 	};
@@ -72,7 +75,7 @@
 			this.list = this.wrap.children();
 			this.state = false;
 			
-			if(typeof(this.opts.page) == "string") {
+			if(typeof(this.opts.page) === "string") {
 				this.opts.page = $(this.target).find(this.opts.page).eq(0).index();
 			}
 			
@@ -87,7 +90,7 @@
 				.on("touchstart", this, this.touchstart)
 				.on("touchmove", this, this.touchmove)
 				.on("touchend touchcancel", this, this.touchend)
-				.on("transitionend", this, this.transitionend)
+				.on("transitionend", this, this.transitionend);
 				
 			$(window).off("resize", this, this.resize).on("resize", this, this.resize);
 			
@@ -97,7 +100,7 @@
 				}
 			});
 			
-			if(typeof(this.opts.initComplete) == "function") {
+			if(typeof(this.opts.initComplete) === "function") {
 				this.opts.initComplete.call(this, this.get_event_data());
 			}
 		},
@@ -109,7 +112,7 @@
 			obj.posx = obj.startx - $(this).position().left;
 			obj.posy = obj.starty - $(this).position().top;
 			
-			if(typeof(obj.opts.stopped) == "function" && obj.speedx != 0) {
+			if(typeof(obj.opts.stopped) === "function" && obj.speedx !== 0) {
 				obj.opts.stopped.call(obj, obj.get_event_data());
 			}
 						
@@ -203,7 +206,7 @@
 		
 		transitionend : function (e) {
 			var obj = e.data;
-			if(typeof(obj.opts.stopped) == "function") {
+			if(typeof(obj.opts.stopped) === "function") {
 				obj.opts.stopped.call(obj, obj.get_event_data());
 			}
 		},
@@ -216,7 +219,7 @@
 				obj.set_limit();
 				obj.pos_control();
 				
-				if(typeof(obj.opts.resizeend) == "function") {
+				if(typeof(obj.opts.resizeend) === "function") {
 					obj.opts.resizeend.call(obj, obj.get_event_data());
 				}
 			}, 200);
@@ -226,11 +229,11 @@
 			var thisx = obj.list.position().left;
 			var thisy = obj.list.position().top;
 			
-			if (obj.state == false) {
+			if (obj.state === false) {
 				if(Math.abs(obj.speedx) < 1 && Math.abs(obj.speedy) < 1) {
 					clearInterval(obj.ticker);
 					
-					if(typeof(obj.opts.stopped) == "function" && obj.speedx != 0) {
+					if(typeof(obj.opts.stopped) === "function" && obj.speedx !== 0) {
 						obj.opts.stopped.call(obj, obj.get_event_data());
 					}
 				} else {
@@ -271,10 +274,10 @@
 		},
 		
 		limit_chk : function (obj) {
-			if(obj.x != undefined) {
-				return !(obj.x > 0) && !(obj.x < this.right);
-			} else if(obj.y != undefined) {
-				return !(obj.y > 0) && !(obj.y < this.bottom);
+			if(obj.x !== undefined) {
+				return (obj.x > 0) === false && (obj.x < this.right) === false;
+			} else if(obj.y !== undefined) {
+				return (obj.y > 0) === false && (obj.y < this.bottom) === false;
 			}
 		},
 		
@@ -284,7 +287,7 @@
 			this.wrapw = this.wrap.width();
 			this.wraph = this.wrap.height();
 			
-			$(this.list.children()).each(function (i, el) {
+			$(this.list.children()).each(function () {
 				listw += $(this).outerWidth();
 				listh += $(this).outerHeight();
 			});
@@ -309,7 +312,7 @@
 		},
 		
 		get_limit : function (obj) {
-			if(obj.x != null) {
+			if(obj.x !== undefined) {
 				if(obj.x > 0) {
 					obj.x = 0;
 				}
@@ -317,7 +320,7 @@
 					obj.x = this.right;
 				}
 				return obj.x;
-			} else if(obj.y != null) {
+			} else if(obj.y !== undefined) {
 				if(obj.y > 0) {
 					obj.y = 0;
 				}
@@ -363,7 +366,7 @@
 		},
 		
 		set_pos : function (obj, duration) {
-			var obj = $.extend({}, {x:0,y:0}, obj);
+			obj = $.extend({}, {x:0,y:0}, obj);
 			this.list.css({
 				"transition" : (!duration) ? "0ms" : duration + "ms linear",
 				"transform" : "translate3d(" + obj.x +"px, " + obj.y +"px, 0px)"
@@ -406,7 +409,7 @@
 				target : this.target,
 				posX : this.posX(),
 				posY : this.posY()
-			}
+			};
 		}
 	};
   

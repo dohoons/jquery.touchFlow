@@ -62,7 +62,7 @@ $(document).ready(function() {
 		$("#touchFlow").data("touchFlow").posX("last");
 	});
 	$(".btn_to230").on("click", function (e) {
-		$("#touchFlow").data("touchFlow").posX(230);
+		$("#touchFlow").data("touchFlow").posX(-230);
 	});
 	
 	// 2 : axis:x, page:'li.on' index
@@ -112,7 +112,7 @@ $(document).ready(function() {
 <div style="padding:10px 0;">
 	<button type="button" class="btn_first">posX("first");</button>
 	<button type="button" class="btn_last">posX("last");</button>
-	<button type="button" class="btn_to230">posX(230);</button>
+	<button type="button" class="btn_to230">posX(-230);</button>
 </div>
 callback log :
 <div id="throw_nav_debug" style="border:1px solid #ccc; height:50px; line-height:1; font-size:11px; overflow:scroll; overflow-x:hidden;"></div>
