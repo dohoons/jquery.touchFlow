@@ -117,7 +117,7 @@
 			}
 						
 			obj.speedx = 0;
-			obj.speedx = 0;
+			obj.speedy = 0;
 			obj.prevx = 0;
 			obj.prevy = 0;
 			obj.tempx = 0;
