@@ -22,9 +22,6 @@
 	$("#target").data("touchFlow").go_page(4);
 */
 
-/*jslint browser: true*/
-/*global jQuery*/
-
 ;(function ($) {
 	
 	var TouchFlow = function (el, settings){
