@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.0.2
+ * @version	1.1.0
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -83,10 +83,16 @@
 				.off("touchstart", this, this.touchstart)
 				.off("touchmove", this, this.touchmove)
 				.off("touchend touchcancel", this.touchend)
+				.off("dragstart", this, this.touchstart)
+				.off("drag", this, this.touchmove)
+				.off("dragend", this, this.touchend)
 				.off("transitionend", this, this.transitionend)
 				.on("touchstart", this, this.touchstart)
 				.on("touchmove", this, this.touchmove)
 				.on("touchend touchcancel", this, this.touchend)
+				.on("dragstart", this, this.touchstart)
+				.on("drag", this, this.touchmove)
+				.on("dragend", this, this.touchend)
 				.on("transitionend", this, this.transitionend);
 				
 			$(window).off("resize", this, this.resize).on("resize", this, this.resize);
@@ -104,8 +110,8 @@
 		
 		touchstart : function (e) {
 			var obj = e.data;
-			obj.startx = e.originalEvent.touches[0].pageX;
-			obj.starty = e.originalEvent.touches[0].pageY;
+			obj.startx = e.pageX || e.originalEvent.touches[0].pageX;
+			obj.starty = e.pageY || e.originalEvent.touches[0].pageY;
 			obj.posx = obj.startx - $(this).position().left;
 			obj.posy = obj.starty - $(this).position().top;
 			
@@ -131,17 +137,19 @@
 		},
 		
 		touchmove : function (e) {
-			var obj = e.data;
-			var left = e.originalEvent.touches[0].pageX - obj.startx;
-			var top = e.originalEvent.touches[0].pageY - obj.starty;
-			var w = left < 0 ? left * -1 : left;
-			var h = top < 0 ? top * -1 : top;
-			var thisx = e.originalEvent.touches[0].pageX - obj.posx;
-			var thisy = e.originalEvent.touches[0].pageY - obj.posy;
-			var limitx = obj.get_limit({x:thisx});
-			var limity = obj.get_limit({y:thisy});
-			var gapx = thisx - limitx;
-			var gapy = thisy - limity;
+			var obj = e.data,
+				pageX = e.pageX || e.originalEvent.touches[0].pageX,
+				pageY = e.pageY || e.originalEvent.touches[0].pageY,
+				left = pageX - obj.startx,
+				top = pageY - obj.starty,
+				w = left < 0 ? left * -1 : left,
+				h = top < 0 ? top * -1 : top,
+				thisx = pageX - obj.posx,
+				thisy = pageY - obj.posy,
+				limitx = obj.get_limit({x:thisx}),
+				limity = obj.get_limit({y:thisy}),
+				gapx = thisx - limitx,
+				gapy = thisy - limity;
 			
 			if(obj.opts.axis == "x" && w > h) {
 				obj.link = false;
@@ -168,12 +176,14 @@
 		},
 		
 		touchend : function (e) {
-			var obj = e.data;
-			var left = obj.lastmove.originalEvent.touches[0].pageX - obj.startx;
-			var top = obj.lastmove.originalEvent.touches[0].pageY - obj.starty;
-			var thisx = $(this).position().left;
-			var thisy = $(this).position().top;
-			var to = 0;
+			var obj = e.data,
+				pageX = obj.lastmove.pageX || obj.lastmove.originalEvent.touches[0].pageX,
+				pageY = obj.lastmove.pageY || obj.lastmove.originalEvent.touches[0].pageY,
+				left = pageX - obj.startx,
+				top = pageY - obj.starty,
+				thisx = $(this).position().left,
+				thisy = $(this).position().top,
+				to = 0;
 			
 			obj.state = false;
 			obj.speedx = obj.tempx;
@@ -223,8 +233,8 @@
 		},
 		
 		move : function (obj) {
-			var thisx = obj.list.position().left;
-			var thisy = obj.list.position().top;
+			var thisx = obj.list.position().left,
+				thisy = obj.list.position().top;
 			
 			if (obj.state === false) {
 				if(Math.abs(obj.speedx) < 1 && Math.abs(obj.speedy) < 1) {
@@ -279,8 +289,8 @@
 		},
 		
 		set_limit : function () {
-			var listw = 0;
-			var listh = 0;
+			var listw = 0,
+				listh = 0;
 			this.wrapw = this.wrap.width();
 			this.wraph = this.wrap.height();
 			
@@ -342,12 +352,12 @@
 		},
 		
 		pos_control : function () {
-			var thisx = this.posX();
-			var thisy = this.posY();
-			var x_chk = this.limit_chk({x:thisx});
-			var x_limit = this.get_limit({x:thisx});
-			var y_chk = this.limit_chk({y:thisy});
-			var y_limit = this.get_limit({y:thisy});
+			var thisx = this.posX(),
+				thisy = this.posY(),
+				x_chk = this.limit_chk({x:thisx}),
+				x_limit = this.get_limit({x:thisx}),
+				y_chk = this.limit_chk({y:thisy}),
+				y_limit = this.get_limit({y:thisy});
 			
 			if(!x_chk || !y_chk) {
 				this.set_pos({x:thisx,y:thisy});

@@ -37,6 +37,7 @@ button { padding:10px; font-size:11px; color:#fff; background:#444; border-radiu
 .nav_v_type li.on { background:#aaa; font-weight:bold; }
 </style>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="jquery.event.drag-1.5.1.min.js"></script>
 <script type="text/javascript" src="jquery.touchFlow.js"></script>
 <script>
 //<![CDATA[
@@ -89,24 +90,24 @@ $(document).ready(function() {
 
 <body>
 <h1>Touch Overflow Scroller (jQuery.touchFlow, dohoons)</h1>
-<p>수평or수직 터치스크롤 내비게이션. 터치스크린에서만 동작</p>
+<p>수평or수직 터치스크롤 내비게이션. 터치or마우스드래그 지원</p>
 <p><a href="https://github.com/dohoons/jquery.touchFlow" target="_blank">https://github.com/dohoons/jquery.touchFlow</a></p>
 
 
 <h2>1 : default(axis x). responsive(using css), callback test</h2>
 <div id="touchFlow" class="nav_h_responsive_type">
 	<ul>
-		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
-		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
-		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
-		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
-		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
-		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
-		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
-		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
-		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
-		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
-		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&amp;text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&amp;text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&amp;text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&amp;text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&amp;text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&amp;text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&amp;text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&amp;text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&amp;text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&amp;text=16:9+img" alt=""></a></p></li>
+		<li><p class="thumb"><a href="#"><img src="http://dummyimage.com/160x90/d5eced/000000.gif&amp;text=16:9+img" alt=""></a></p></li>
 	</ul>
 </div>
 <div style="padding:10px 0;">
