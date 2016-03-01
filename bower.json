@@ -1,0 +1,19 @@
+{
+	"name": "jquery.touchFlow",
+	"version": "1.1.0",
+	"homepage": "https://github.com/dohoons/jquery.touchFlow",
+	"authors": [
+		"dohoons@gmail.com"
+	],
+	"description": "jQuery Touch Overflow Scroller",
+	"keywords": [
+		"javascript",
+		"jQuery",
+		"scroll",
+		"swipe"
+	],
+	"license": "MIT",
+	"dependencies": {
+		"jquery": "1.7.0~"
+	}
+}
