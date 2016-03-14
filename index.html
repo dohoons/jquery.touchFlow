@@ -16,7 +16,7 @@
 	body { width:50%; margin:0 auto; }
 }
 h1 { font-size:16px; font-weight:bold; }
-h2 { margin-top:10px; text-align:center; }
+h2 { margin-top:20px; text-align:center; }
 button { padding:10px; font-size:11px; color:#fff; background:#444; border-radius:4px; } 
 
 .nav_h_responsive_type { background:#ccc; position:relative; overflow:hidden; }
@@ -30,11 +30,12 @@ button { padding:10px; font-size:11px; color:#fff; background:#444; border-radiu
 .nav_h_type ul { float:left; display:block; font-size:0; white-space:nowrap; position:relative; }
 .nav_h_type li { -webkit-box-sizing:border-box; box-sizing:border-box; display:inline-block; width:100px; height:100px; line-height:100px; vertical-align:top; text-align:center; font-size:12px; background:#eee; border:1px solid #ccc; }
 .nav_h_type li.on { background:#aaa; font-weight:bold; }
+.nav_h_type.wide li { width:280px; }
 
 .nav_v_type { width:200px; height:200px; margin:0 auto; background:#ccc; position:relative; overflow:hidden; }
 .nav_v_type ul { display:block; position:relative; }
 .nav_v_type li { -webkit-box-sizing:border-box; box-sizing:border-box; display:block; width:100%; height:25px; line-height:25px; text-align:center; font-size:12px; background:#eee; border:1px solid #ccc; }
-.nav_v_type li.on { background:#aaa; font-weight:bold; }
+.nav_v_type li.on { background:#aaa; font-weight:bold; } }
 </style>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script type="text/javascript" src="jquery.event.drag-1.5.1.min.js"></script>
@@ -82,6 +83,12 @@ $(document).ready(function() {
 	$(".nav_h_list").touchFlow({
 		axis : "x",
 		page : "li.on"
+	});
+	
+	// 5 : axis:x, snap:true
+	$("#touchFlow5").touchFlow({
+		axis : "x",
+		snap : true
 	});
 });
 //]]>
@@ -213,6 +220,25 @@ callback log :
 		<li>contents 10</li>
 	</ul>
 </div>
+
+<h2>5 : axis:x, snap:true</h2>
+<div id="touchFlow5" class="nav_h_type wide">
+	<ul>
+		<li>contents 1</li>
+		<li>contents 2</li>
+		<li>contents 3</li>
+		<li>contents 4</li>
+		<li>contents 5</li>
+		<li>contents 6</li>
+		<li>contents 7</li>
+		<li>contents 8</li>
+		<li>contents 9</li>
+		<li>contents 10</li>
+	</ul>
+</div>
+
+
+<br><br><br><br><br><br>
 
 </body>
 </html>

@@ -2,13 +2,14 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.1.0
+ * @version	1.2.0
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
  *		axis				-	드래그 방향 (String, default "x")
  *		page				-	초기 페이지 (Number or String, default 0)
  *		speed				-	애니메이션 속도 (Number, default 200)
+ *		snap				-	스냅 기능 (Boolean, default false)
  *		initComplete		-	초기화 콜백 (Function, default null)
  *		stopped				-	정지 콜백 (Function, default null)
  *		resizeend			-	윈도우 리사이즈 콜백 (Function, default null)
@@ -30,6 +31,7 @@
 			axis : "x",
 			page : 0,
 			speed : 200,
+			snap : false,
 			initComplete : null,
 			stopped : null,
 			resizeend : null
@@ -231,13 +233,51 @@
 				}
 			}, 200);
 		},
+
+		get_nearby_page : function (n) {
+			var pos = (typeof n === "number") ? Math.abs(n) : null,
+				arr = [],
+				list_pos = this.list.position(),
+				li = this.list.children(),
+				len = li.length,
+				tg = "";
+
+			if(this.opts.axis === "x") {
+				tg = "left";
+				if(pos === null) {
+					pos = Math.abs(list_pos.left);
+				}
+			} else {
+				tg = "top";
+				if(pos === null) {
+					pos = Math.abs(list_pos.top);
+				}
+			}
+
+			for(var i=0; i<len; ++i) {
+				arr[i] = Math.abs(li.eq(i).position()[tg] - pos);
+			}
+
+			return arr.indexOf(Math.min.apply(null, arr));
+		},
 		
 		move : function (obj) {
 			var thisx = obj.list.position().left,
 				thisy = obj.list.position().top;
 			
 			if (obj.state === false) {
-				if(Math.abs(obj.speedx) < 1 && Math.abs(obj.speedy) < 1) {
+				var abs_spdx = Math.abs(obj.speedx),
+					abs_spdy = Math.abs(obj.speedy);
+
+				if(obj.opts.snap && obj.opts.axis === "x" && abs_spdx < 10) {
+					clearInterval(obj.ticker);
+					obj.go_page(obj.get_nearby_page(thisx));
+
+				} else if(obj.opts.snap && obj.opts.axis === "y" && abs_spdy < 10) {
+					clearInterval(obj.ticker);
+					obj.go_page(obj.get_nearby_page(thisy));
+
+				} else if(abs_spdx < 1 && abs_spdy < 1) {
 					clearInterval(obj.ticker);
 					
 					if(typeof(obj.opts.stopped) === "function" && obj.speedx !== 0) {
