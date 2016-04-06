@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.2.1
+ * @version	1.2.2
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -423,7 +423,7 @@
 		},
 		
 		posX : function (val) {
-			if(typeof val === "number") {
+			if(val !== undefined) {
 				var to = this.get_limit({x:val});
 				if(val == "first") {
 					to = 0;
@@ -439,7 +439,7 @@
 		},
 		
 		posY : function (val) {
-			if(typeof val === "number") {
+			if(val !== undefined) {
 				var to = this.get_limit({y:val});
 				if(val == "first") {
 					to = 0;
@@ -448,6 +448,8 @@
 				}
 				clearInterval(this.ticker);
 				this.set_pos({y:to}, this.duration);
+				
+				return false;
 			}
 			return this.list.position().top;
 		},
