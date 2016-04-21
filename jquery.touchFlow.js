@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.2.2
+ * @version	1.2.3
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -108,6 +108,8 @@
 			if(typeof(this.opts.initComplete) === "function") {
 				this.opts.initComplete.call(this, this.get_event_data());
 			}
+
+			return this;
 		},
 		
 		touchstart : function (e) {
@@ -391,6 +393,7 @@
 				var y = -(tg.position().top);
 				this.posY(y);
 			}
+			return this;
 		},
 		
 		pos_control : function () {
@@ -433,7 +436,7 @@
 				clearInterval(this.ticker);
 				this.set_pos({x:to}, this.duration);
 				
-				return false;
+				return this;
 			}
 			return this.list.position().left;
 		},
@@ -449,7 +452,7 @@
 				clearInterval(this.ticker);
 				this.set_pos({y:to}, this.duration);
 				
-				return false;
+				return this;
 			}
 			return this.list.position().top;
 		},
