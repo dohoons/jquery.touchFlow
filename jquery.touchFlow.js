@@ -23,7 +23,11 @@
 	$("#target").data("touchFlow").go_page(4);
 */
 
+/* global jQuery */
+
 ;(function ($) {
+
+	"use strict";
 	
 	var TouchFlow = function (el, settings){
 		
