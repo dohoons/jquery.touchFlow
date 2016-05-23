@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.2.3
+ * @version	1.3.0
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -10,6 +10,8 @@
  *		page				-	초기 페이지 (Number or String, default 0)
  *		speed				-	애니메이션 속도 (Number, default 200)
  *		snap				-	스냅 기능 (Boolean, default false)
+ *		scrollbar			-	스크롤바 표시 (Boolean, default false)
+ *		scrollbarAutoHide	-	스크롤바 자동 숨김 (Boolean, default true)
  *		initComplete		-	초기화 콜백 (Function, default null)
  *		stopped				-	정지 콜백 (Function, default null)
  *		resizeend			-	윈도우 리사이즈 콜백 (Function, default null)
@@ -36,6 +38,8 @@
 			page : 0,
 			speed : 200,
 			snap : false,
+			scrollbar : false,
+			scrollbarAutoHide : true,
 			initComplete : null,
 			stopped : null,
 			resizeend : null
@@ -68,6 +72,7 @@
 		this.state = false;
 		this.link = true;
 		this.lastmove = null;
+		this.scroll = {};
 		
 		this.init();
 	};
@@ -108,12 +113,80 @@
 					return false;
 				}
 			});
+
+			if(this.opts.scrollbar) {
+				this.scrollbar_init();
+			}
 			
 			if(typeof(this.opts.initComplete) === "function") {
 				this.opts.initComplete.call(this, this.get_event_data());
 			}
 
 			return this;
+		},
+
+		scrollbar_init : function () {
+			if(this.scroll.wrap === undefined) {
+				this.scroll.wrap = $('<div class="touchflow-scrollbar"><div></div></div>');
+				this.scroll.bar = this.scroll.wrap.find(" > div");
+
+				this.wrap.append(this.scroll.wrap);
+				this.scrollbar_pos();
+			}
+		},
+
+		scrollbar_pos : function (f) {
+			if(this.opts.scrollbar) {
+				var wrap = this.scroll.wrap,
+					bar = this.scroll.bar,
+					full,
+					pos,
+					transition = (f) ? "300ms" : "0ms";
+
+				if(this.opts.axis === "x") {
+					full = this.wrapw / this.listw * 100;
+					pos = -this.posX() / this.listw * 100;
+
+					wrap.css({
+						width : "100%",
+						height : "5px",
+						opacity : 1
+					});
+
+					bar.css({
+						width : full + "%",
+						height : "5px",
+						left : pos + "%",
+						transition : transition
+					});
+				} else if(this.opts.axis === "y") {
+					full = this.wraph / this.listh * 100;
+					pos = -this.posY() / this.listh * 100;
+
+					wrap.css({
+						width : "5px",
+						height : "100%",
+						opacity : 1
+					});
+
+					bar.css({
+						width : "5px",
+						height : full + "%",
+						top : pos + "%",
+						transition : transition
+					});
+				}
+
+				if(this.opts.scrollbarAutoHide) {
+					setTimeout(function () {
+						if(f) {
+							wrap.css({
+								opacity : 0
+							});
+						}
+					}, 300);
+				}
+			}
 		},
 		
 		touchstart : function (e) {
@@ -226,6 +299,7 @@
 			if(typeof(obj.opts.stopped) === "function") {
 				obj.opts.stopped.call(obj, obj.get_event_data());
 			}
+			obj.scrollbar_pos(true);
 		},
 		
 		resize : function (e) {
@@ -240,6 +314,8 @@
 					obj.opts.resizeend.call(obj, obj.get_event_data());
 				}
 			}, 200);
+
+			obj.scrollbar_pos(true);
 		},
 
 		get_nearby_page : function (n) {
@@ -291,6 +367,8 @@
 					if(typeof(obj.opts.stopped) === "function" && obj.speedx !== 0) {
 						obj.opts.stopped.call(obj, obj.get_event_data());
 					}
+
+					this.scrollbar_pos(true);
 				} else {
 					obj.speedx = 0.95 * obj.speedx;
 					obj.speedy = 0.95 * obj.speedy;
@@ -314,11 +392,9 @@
 							clearInterval(obj.ticker);
 							obj.set_pos({y:y_limit}, obj.duration);
 						}
-						
-						return false;
+					} else {
+						obj.set_pos({x:x_limit,y:y_limit});
 					}
-					
-					obj.set_pos({x:x_limit,y:y_limit});
 				}
 			} else{
 				obj.tempx = thisx - obj.prevx;
@@ -326,6 +402,8 @@
 				obj.prevx = thisx;
 				obj.prevy = thisy;
 			}
+			
+			this.scrollbar_pos();
 		},
 		
 		limit_chk : function (obj) {
