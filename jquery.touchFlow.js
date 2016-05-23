@@ -313,9 +313,9 @@
 				if(typeof(obj.opts.resizeend) === "function") {
 					obj.opts.resizeend.call(obj, obj.get_event_data());
 				}
-			}, 200);
 
-			obj.scrollbar_pos(true);
+				obj.scrollbar_pos(true);
+			}, 200);
 		},
 
 		get_nearby_page : function (n) {
