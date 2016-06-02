@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.3.0
+ * @version	1.3.1
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -231,10 +231,13 @@
 				limity = obj.get_limit({y:thisy}),
 				gapx = thisx - limitx,
 				gapy = thisy - limity;
-			
+
 			if(obj.opts.axis == "x" && w > h) {
 				obj.link = false;
-				e.preventDefault();
+
+				if(obj.limit_chk({x:thisx})) {
+					e.preventDefault();
+				}
 				
 				if(Math.abs(gapx) > 0) {
 					thisx -= gapx / 2;
@@ -243,7 +246,10 @@
 				obj.set_pos({x:thisx});
 			} else if(obj.opts.axis == "y" && w < h) {
 				obj.link = false;
-				e.preventDefault();
+
+				if(obj.limit_chk({y:thisy})) {
+					e.preventDefault();
+				}
 				
 				if(Math.abs(gapy) > 0) {
 					thisy -= gapy / 2;
