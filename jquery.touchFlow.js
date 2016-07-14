@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.3.1
+ * @version	1.3.2
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -30,6 +30,16 @@
 ;(function ($) {
 
 	"use strict";
+
+	var supportsCssTransitions = (function (style) {
+		var prefixes = ['Webkit','Moz','Ms'];
+		for(var i=0, l=prefixes.length; i < l; i++ ) {
+			if( typeof style[prefixes[i] + 'Transition'] !== 'undefined') {
+				return true;
+			}
+		}
+		return false;
+	})(document.createElement('div').style);
 	
 	var TouchFlow = function (el, settings){
 		
@@ -506,11 +516,17 @@
 		},
 		
 		set_pos : function (obj, duration) {
-			obj = $.extend({}, {x:0,y:0}, obj);
-			this.list.css({
+			var style = (supportsCssTransitions) ? {
 				"transition" : (!duration) ? "0ms" : duration + "ms linear",
 				"transform" : "translate3d(" + obj.x +"px, " + obj.y +"px, 0px)"
-			});
+			} : {
+				"left" : obj.x + "px",
+				"top" : obj.y + "px"
+			};
+
+			obj = $.extend({}, {x:0,y:0}, obj);
+
+			this.list.css(style);
 		},
 		
 		posX : function (val) {
