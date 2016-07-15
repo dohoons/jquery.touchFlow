@@ -516,6 +516,8 @@
 		},
 		
 		set_pos : function (obj, duration) {
+			obj = $.extend({}, {x:0,y:0}, obj);
+
 			var style = (supportsCssTransitions) ? {
 				"transition" : (!duration) ? "0ms" : duration + "ms linear",
 				"transform" : "translate3d(" + obj.x +"px, " + obj.y +"px, 0px)"
@@ -523,8 +525,6 @@
 				"left" : obj.x + "px",
 				"top" : obj.y + "px"
 			};
-
-			obj = $.extend({}, {x:0,y:0}, obj);
 
 			this.list.css(style);
 		},
