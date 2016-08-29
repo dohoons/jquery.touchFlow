@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.3.3
+ * @version	1.4.0
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -47,6 +47,7 @@
 			axis : "x",
 			page : 0,
 			speed : 200,
+			side: 0.15,
 			snap : false,
 			scrollbar : false,
 			scrollbarAutoHide : true,
@@ -66,6 +67,7 @@
 		this.tmp = null;
 		this.ticker = null;
 		this.duration = this.opts.speed;
+		this.side = this.opts.side;
 		this.delay = 27;
 		this.posx = 0;
 		this.posy = 0;
@@ -485,6 +487,46 @@
 				var y = -(tg.position().top);
 				this.posY(y);
 			}
+			return this;
+		},
+		
+		view_page : function (page) {
+			this.opts.page = page;
+			var tg = this.list.children().eq(page);
+			
+			if(this.opts.axis == "x") {
+				var x = tg.position().left,
+					w = tg.width(),
+					xside = this.wrapw * this.side,
+					posX = this.posX();
+
+				if(x + posX < 0) {
+					x = -(x - xside);
+					this.posX(x);
+				}
+				
+				if(x + w + posX > this.wrapw) {
+					x = -(x + w - this.wrapw + xside);
+					this.posX(x);
+				}
+
+			} else if(this.opts.axis == "y") {
+				var y = tg.position().top,
+					h = tg.height(),
+					yside = this.wraph * this.side,
+					posY = this.posY();
+				
+				if(y + posY < 0) {
+					y = -(y - yside);
+					this.posY(y);
+				}
+
+				if(y + h + posY > this.wraph) {
+					y = -(y + h - this.wraph + yside);
+					this.posY(y);
+				}
+			}
+
 			return this;
 		},
 		
