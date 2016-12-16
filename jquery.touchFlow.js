@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.4.0
+ * @version	1.4.1
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -203,8 +203,8 @@
 		
 		touchstart : function (e) {
 			var obj = e.data;
-			obj.startx = e.pageX || e.originalEvent.touches[0].pageX;
-			obj.starty = e.pageY || e.originalEvent.touches[0].pageY;
+			obj.startx = e.originalEvent.touches ? e.originalEvent.touches[0].pageX : e.pageX;
+			obj.starty = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
 			obj.posx = obj.startx - $(this).position().left;
 			obj.posy = obj.starty - $(this).position().top;
 			
@@ -231,8 +231,8 @@
 		
 		touchmove : function (e) {
 			var obj = e.data,
-				pageX = e.pageX || e.originalEvent.touches[0].pageX,
-				pageY = e.pageY || e.originalEvent.touches[0].pageY,
+				pageX = e.originalEvent.touches ? e.originalEvent.touches[0].pageX : e.pageX,
+				pageY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY,
 				left = pageX - obj.startx,
 				top = pageY - obj.starty,
 				w = left < 0 ? left * -1 : left,
