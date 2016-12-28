@@ -260,8 +260,8 @@
 		
 		touchend : function (e) {
 			var obj = e.data,
-				pageX = obj.lastmove.pageX || obj.lastmove.originalEvent.touches[0].pageX,
-				pageY = obj.lastmove.pageY || obj.lastmove.originalEvent.touches[0].pageY,
+				pageX = obj.lastmove.originalEvent.touches ? obj.lastmove.originalEvent.touches[0].pageX : obj.lastmove.pageX,
+				pageY = obj.lastmove.originalEvent.touches ? obj.lastmove.originalEvent.touches[0].pageY : obj.lastmove.pageY,
 				left = pageX - obj.startx,
 				top = pageY - obj.starty,
 				thisx = $(this).position().left,
