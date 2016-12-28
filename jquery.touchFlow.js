@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.4.1
+ * @version	1.4.2
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -31,15 +31,7 @@
 
 	"use strict";
 
-	var supportsCssTransitions = (function (style) {
-		var prefixes = ['Webkit','Moz','Ms'];
-		for(var i=0, l=prefixes.length; i < l; i++ ) {
-			if( typeof style[prefixes[i] + 'Transition'] !== 'undefined') {
-				return true;
-			}
-		}
-		return false;
-	})(document.createElement('div').style);
+	var supportsCssTransitions = 'transition' in document.documentElement.style || 'WebkitTransition' in document.documentElement.style;
 	
 	var TouchFlow = function (el, settings){
 		
@@ -68,7 +60,7 @@
 		this.ticker = null;
 		this.duration = this.opts.speed;
 		this.side = this.opts.side;
-		this.delay = 27;
+		this.delay = 17;
 		this.posx = 0;
 		this.posy = 0;
 		this.startx = 0;
@@ -218,11 +210,9 @@
 			obj.prevy = 0;
 			obj.tempx = 0;
 			obj.tempy = 0;
-			
-			clearInterval(obj.ticker);
-			obj.ticker = setInterval(function () {
-				obj.move(obj);
-			}, obj.delay);
+
+			obj.stop_animation();
+			obj.start_animation();
 			
 			obj.state = true;
 			obj.lastmove = e;
@@ -288,7 +278,7 @@
 				} else {
 					to = 0;
 				}
-				clearInterval(obj.ticker);
+				obj.stop_animation();
 				obj.set_pos({x:to}, obj.duration);
 			} else if(obj.opts.axis == "y" && !obj.limit_chk({y:thisy})) {
 				if(top < 0) {
@@ -296,7 +286,7 @@
 				} else {
 					to = 0;
 				}
-				clearInterval(obj.ticker);
+				obj.stop_animation();
 				obj.set_pos({y:to}, obj.duration);
 			}
 			
@@ -356,66 +346,88 @@
 
 			return arr.indexOf(Math.min.apply(null, arr));
 		},
+
+		start_animation : function () {
+			if(window.requestAnimationFrame) {
+				this.ticker = requestAnimationFrame(this.move.bind(this));
+			} else {
+				this.ticker = setTimeout(this.move.bind(this), this.delay);
+			}
+		},
+
+		stop_animation : function () {
+			if(window.requestAnimationFrame) {
+				cancelAnimationFrame(this.ticker);
+			} else {
+				clearTimeout(this.ticker);
+			}
+		},
 		
-		move : function (obj) {
-			var thisx = obj.list.position().left,
-				thisy = obj.list.position().top;
+		move : function () {
+			var thisx = this.list.position().left,
+				thisy = this.list.position().top;
 			
-			if (obj.state === false) {
-				var abs_spdx = Math.abs(obj.speedx),
-					abs_spdy = Math.abs(obj.speedy);
+			if (this.state === false) {
+				var abs_spdx = Math.abs(this.speedx),
+					abs_spdy = Math.abs(this.speedy);
 
-				if(obj.opts.snap && obj.opts.axis === "x" && abs_spdx < 10) {
-					clearInterval(obj.ticker);
-					obj.go_page(obj.get_nearby_page(thisx));
+				if(this.opts.snap && this.opts.axis === "x" && abs_spdx < 10) {
+					this.stop_animation();
+					this.go_page(this.get_nearby_page(thisx));
+					return;
 
-				} else if(obj.opts.snap && obj.opts.axis === "y" && abs_spdy < 10) {
-					clearInterval(obj.ticker);
-					obj.go_page(obj.get_nearby_page(thisy));
+				} else if(this.opts.snap && this.opts.axis === "y" && abs_spdy < 10) {
+					this.stop_animation();
+					this.go_page(this.get_nearby_page(thisy));
+					return;
 
 				} else if(abs_spdx < 1 && abs_spdy < 1) {
-					clearInterval(obj.ticker);
+					this.stop_animation();
 					
-					if(typeof(obj.opts.stopped) === "function" && obj.speedx !== 0) {
-						obj.opts.stopped.call(obj, obj.get_event_data());
+					if(typeof(this.opts.stopped) === "function" && this.speedx !== 0) {
+						this.opts.stopped.call(this, this.get_event_data());
 					}
 
 					this.scrollbar_pos(true);
+					return;
 				} else {
-					obj.speedx = 0.95 * obj.speedx;
-					obj.speedy = 0.95 * obj.speedy;
-					thisx += obj.speedx;
-					thisy += obj.speedy;
+					this.speedx = 0.95 * this.speedx;
+					this.speedy = 0.95 * this.speedy;
+					thisx += this.speedx;
+					thisy += this.speedy;
 					
-					var x_chk = obj.limit_chk({x:thisx});
-					var x_limit = obj.get_limit({x:thisx});
-					var y_chk = obj.limit_chk({y:thisy});
-					var y_limit = obj.get_limit({y:thisy});
+					var x_chk = this.limit_chk({x:thisx});
+					var x_limit = this.get_limit({x:thisx});
+					var y_chk = this.limit_chk({y:thisy});
+					var y_limit = this.get_limit({y:thisy});
 					
 					if(!x_chk || !y_chk) {
-						obj.set_pos({x:thisx,y:thisy});
+						this.set_pos({x:thisx,y:thisy});
 						
 						if(Math.abs(thisx - x_limit) > 70) {
-							clearInterval(obj.ticker);
-							obj.set_pos({x:x_limit}, obj.duration);
+							this.stop_animation();
+							this.set_pos({x:x_limit}, this.duration);
+							return;
 						}
 						
 						if(Math.abs(thisy - y_limit) > 70) {
-							clearInterval(obj.ticker);
-							obj.set_pos({y:y_limit}, obj.duration);
+							this.stop_animation();
+							this.set_pos({y:y_limit}, this.duration);
+							return;
 						}
 					} else {
-						obj.set_pos({x:x_limit,y:y_limit});
+						this.set_pos({x:x_limit,y:y_limit});
 					}
 				}
 			} else{
-				obj.tempx = thisx - obj.prevx;
-				obj.tempy = thisy - obj.prevy;
-				obj.prevx = thisx;
-				obj.prevy = thisy;
+				this.tempx = thisx - this.prevx;
+				this.tempy = thisy - this.prevy;
+				this.prevx = thisx;
+				this.prevy = thisy;
 			}
 			
 			this.scrollbar_pos();
+			this.start_animation();
 		},
 		
 		limit_chk : function (obj) {
@@ -561,7 +573,7 @@
 				"left" : obj.x + "px",
 				"top" : obj.y + "px"
 			};
-
+			
 			this.list.css(style);
 		},
 		
@@ -573,7 +585,7 @@
 				} else if(val == "last") {
 					to = this.right;
 				}
-				clearInterval(this.ticker);
+				this.stop_animation();
 				this.set_pos({x:to}, this.duration);
 				
 				return this;
@@ -589,7 +601,7 @@
 				} else if(val == "last") {
 					to = this.bottom;
 				}
-				clearInterval(this.ticker);
+				this.stop_animation();
 				this.set_pos({y:to}, this.duration);
 				
 				return this;
