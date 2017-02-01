@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.4.2
+ * @version	1.4.3
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -323,7 +323,7 @@
 		get_nearby_page : function (n) {
 			var pos = (typeof n === "number") ? Math.abs(n) : null,
 				arr = [],
-				list_pos = this.list.position(),
+				list_pos = this.list.offset(),
 				li = this.list.children(),
 				len = li.length,
 				tg = "";
@@ -341,7 +341,7 @@
 			}
 
 			for(var i=0; i<len; ++i) {
-				arr[i] = Math.abs(li.eq(i).position()[tg] - pos);
+				arr[i] = Math.abs(li.eq(i).offset()[tg] - list_pos[tg] - pos);
 			}
 
 			return arr.indexOf(Math.min.apply(null, arr));
@@ -489,14 +489,18 @@
 		},
 		
 		go_page : function (page) {
+			var list_pos = this.list.offset(),
+				pos = this.list.children().map(function() {
+					return $(this).offset();
+				}); 
+
 			this.opts.page = page;
-			var tg = this.list.children().eq(page);
-			
+
 			if(this.opts.axis == "x") {
-				var x = -(tg.position().left);
+				var x = -((pos[page].left - list_pos.left) - (pos[0].left - list_pos.left));
 				this.posX(x);
 			} else if(this.opts.axis == "y") {
-				var y = -(tg.position().top);
+				var y = -((pos[page].top - list_pos.top) - (pos[0].top - list_pos.top));
 				this.posY(y);
 			}
 			return this;
