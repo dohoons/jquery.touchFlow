@@ -102,13 +102,15 @@
 				.off("drag", this, this.touchmove)
 				.off("dragend", this, this.touchend)
 				.off("transitionend", this, this.transitionend)
+				.off("wheel", this, this.wheel)
 				.on("touchstart", this, this.touchstart)
 				.on("touchmove", this, this.touchmove)
 				.on("touchend touchcancel", this, this.touchend)
 				.on("dragstart", this, this.touchstart)
 				.on("drag", this, this.touchmove)
 				.on("dragend", this, this.touchend)
-				.on("transitionend", this, this.transitionend);
+				.on("transitionend", this, this.transitionend)
+				.on('wheel', this, this.wheel);
 				
 			$(window).off("resize", this, this.resize).on("resize", this, this.resize);
 			
@@ -318,6 +320,42 @@
 
 				obj.scrollbar_pos(true);
 			}, 200);
+		},
+
+		wheel : function (e) {
+			var obj = e.data,
+				pos = 0,
+				chk = {};
+			
+			if(e.originalEvent.deltaY > 0) {
+				if(obj.opts.axis === "x") {
+					pos = obj.posX();
+					chk = {x:pos - 1};
+					obj.posX( pos - 100 );
+				} else {
+					pos = obj.posY();
+					chk = {y:pos - 1};
+					obj.posY( pos - 100 );
+				}
+			} else if(e.originalEvent.deltaY < 0) {
+				if(obj.opts.axis === "x") {
+					pos = obj.posX();
+					chk = {x:pos + 1};
+					obj.posX( pos + 100 );
+				} else {
+					pos = obj.posY();
+					chk = {y:pos + 1};
+					obj.posY( pos + 100 );
+				}
+			} else {
+				return true;
+			}
+				
+			if(obj.limit_chk(chk) === true) {
+				e.preventDefault();
+			}
+
+			obj.scrollbar_pos(true);
 		},
 
 		get_nearby_page : function (n) {
