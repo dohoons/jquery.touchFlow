@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.4.3
+ * @version	1.5.0
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -325,27 +325,28 @@
 		wheel : function (e) {
 			var obj = e.data,
 				pos = 0,
-				chk = {};
+				chk = {},
+				gap = 100;
 			
 			if(e.originalEvent.deltaY > 0) {
 				if(obj.opts.axis === "x") {
 					pos = obj.posX();
 					chk = {x:pos - 1};
-					obj.posX( pos - 100 );
+					obj.posX( pos - gap );
 				} else {
 					pos = obj.posY();
 					chk = {y:pos - 1};
-					obj.posY( pos - 100 );
+					obj.posY( pos - gap );
 				}
 			} else if(e.originalEvent.deltaY < 0) {
 				if(obj.opts.axis === "x") {
 					pos = obj.posX();
 					chk = {x:pos + 1};
-					obj.posX( pos + 100 );
+					obj.posX( pos + gap );
 				} else {
 					pos = obj.posY();
 					chk = {y:pos + 1};
-					obj.posY( pos + 100 );
+					obj.posY( pos + gap );
 				}
 			} else {
 				return true;
