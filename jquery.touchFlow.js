@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.5.0
+ * @version	1.5.1
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -25,10 +25,31 @@
 	$("#target").data("touchFlow").go_page(4);
 */
 
-/* global jQuery */
+/* jslint node: true, jquery: true */
+/* globals define */
 
-;(function ($) {
+(function (factory) {
+	"use strict";
 
+	if (typeof define === 'function' && define.amd) {
+		define(['jquery'], factory);
+	} else if (typeof module === 'object' && module.exports) {
+		module.exports = function (root, jQuery) {
+			if (jQuery === undefined) {
+				if (typeof window !== 'undefined') {
+					jQuery = require('jquery');
+				}
+				else {
+					jQuery = require('jquery')(root);
+				}
+			}
+			factory(jQuery);
+			return jQuery;
+		};
+	} else {
+		factory(jQuery);
+	}
+}(function ($) {
 	"use strict";
 
 	var supportsCssTransitions = 'transition' in document.documentElement.style || 'WebkitTransition' in document.documentElement.style;
@@ -669,4 +690,4 @@
 			}
 		});
 	};
-})(jQuery);
+}));
