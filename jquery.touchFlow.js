@@ -2,10 +2,11 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.5.1
+ * @version	1.6.0
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
+ *		useMouse			-	마우스 드래그 사용 (default true)
  *		axis				-	드래그 방향 (String, default "x")
  *		page				-	초기 페이지 (Number or String, default 0)
  *		speed				-	애니메이션 속도 (Number, default 200)
@@ -57,6 +58,7 @@
 	var TouchFlow = function (el, settings){
 		
 		var defaults = {
+			useMouse: true,
 			axis : "x",
 			page : 0,
 			speed : 200,
@@ -119,19 +121,19 @@
 				.off("touchstart", this, this.touchstart)
 				.off("touchmove", this, this.touchmove)
 				.off("touchend touchcancel", this.touchend)
-				.off("dragstart", this, this.touchstart)
-				.off("drag", this, this.touchmove)
-				.off("dragend", this, this.touchend)
 				.off("transitionend", this, this.transitionend)
 				.off("wheel", this, this.wheel)
 				.on("touchstart", this, this.touchstart)
 				.on("touchmove", this, this.touchmove)
 				.on("touchend touchcancel", this, this.touchend)
-				.on("dragstart", this, this.touchstart)
-				.on("drag", this, this.touchmove)
-				.on("dragend", this, this.touchend)
 				.on("transitionend", this, this.transitionend)
 				.on('wheel', this, this.wheel);
+
+			if(this.opts.useMouse) {
+				this.list
+					.off("mousedown", this, this.touchstart)
+					.on("mousedown", this, this.touchstart);
+			}
 				
 			$(window).off("resize", this, this.resize).on("resize", this, this.resize);
 			
@@ -218,15 +220,16 @@
 		
 		touchstart : function (e) {
 			var obj = e.data;
+			var pos = $(this).position();
 			obj.startx = e.originalEvent.touches ? e.originalEvent.touches[0].pageX : e.pageX;
 			obj.starty = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY;
-			obj.posx = obj.startx - $(this).position().left;
-			obj.posy = obj.starty - $(this).position().top;
+			obj.posx = obj.startx - pos.left;
+			obj.posy = obj.starty - pos.top;
 			
 			if(typeof(obj.opts.stopped) === "function" && obj.speedx !== 0) {
 				obj.opts.stopped.call(obj, obj.get_event_data());
 			}
-						
+			
 			obj.speedx = 0;
 			obj.speedy = 0;
 			obj.prevx = 0;
@@ -240,6 +243,12 @@
 			obj.state = true;
 			obj.lastmove = e;
 			e.stopPropagation();
+
+			if(e.type == "mousedown") {
+				$(document)
+					.on('mousemove', obj, obj.touchmove)
+					.on('mouseup', obj, obj.touchend);
+			}
 		},
 		
 		touchmove : function (e) {
@@ -287,8 +296,9 @@
 				pageY = obj.lastmove.originalEvent.touches ? obj.lastmove.originalEvent.touches[0].pageY : obj.lastmove.pageY,
 				left = pageX - obj.startx,
 				top = pageY - obj.starty,
-				thisx = $(this).position().left,
-				thisy = $(this).position().top,
+				pos = $(obj.list).position(),
+				thisx = pos.left,
+				thisy = pos.top,
 				to = 0;
 			
 			obj.state = false;
@@ -317,6 +327,12 @@
 				obj.link = true;
 			},50);
 			e.stopPropagation();
+			
+			if(obj.opts.useMouse) {
+				$(document)
+					.off('mousemove', obj.touchmove)
+					.off('mouseup', obj.touchend);
+			}
 		},
 		
 		transitionend : function (e) {
@@ -424,8 +440,9 @@
 		},
 		
 		move : function () {
-			var thisx = this.list.position().left,
-				thisy = this.list.position().top;
+			var pos = this.list.position();
+			var thisx = pos.left,
+				thisy = pos.top;
 			
 			if (this.state === false) {
 				var abs_spdx = Math.abs(this.speedx),
