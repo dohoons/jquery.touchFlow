@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.6.0
+ * @version	1.6.1
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
