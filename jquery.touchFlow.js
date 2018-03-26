@@ -123,6 +123,8 @@
 				.off("touchend touchcancel", this.touchend)
 				.off("transitionend", this, this.transitionend)
 				.off("wheel", this, this.wheel)
+				.off("dragstart")
+				.on("dragstart", function(e) { e.preventDefault(); })
 				.on("touchstart", this, this.touchstart)
 				.on("touchmove", this, this.touchmove)
 				.on("touchend touchcancel", this, this.touchend)
