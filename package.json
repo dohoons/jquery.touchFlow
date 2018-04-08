@@ -1,0 +1,30 @@
+{
+  "name": "jquery.touchflow",
+  "version": "1.6.1",
+  "description": "jQuery Touch Overflow Scroller",
+	"keywords": [
+		"touchFlow",
+		"jquery.touchFlow",
+		"touch scroller",
+		"swipe",
+    "mobile",
+    "touch"
+	],
+  "main": "jquery.touchFlow.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dohoons/jquery.touchFlow.git"
+  },
+  "author": {
+    "name": "dohoons",
+    "email": "dohoons@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dohoons/jquery.touchFlow/issues"
+  },
+  "homepage": "https://github.com/dohoons/jquery.touchFlow#readme"
+}
