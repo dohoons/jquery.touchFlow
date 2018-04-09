@@ -5,7 +5,27 @@
 - CSS Selector에 따라 다중 적용 가능
 - jQuery 1.7+, IE9+ 지원
 
-## 기본구조
+## Demo
+http://dohoons.com/test/touchFlow
+
+## 설치 방법
+
+### \<script\> 태그 추가
+``` html
+<script src="jquery.touchFlow.js"></script>
+```
+
+### NPM
+
+``` sh
+$ npm i jquery.touchflow
+```
+``` js
+var $ = require('jquery');
+require('jquery.touchflow')($);
+```
+
+## 기본 사용법
 ``` css
 .nav_h_type { background:#ccc; position:relative; overflow:hidden; }
 .nav_h_type ul { float:left; display:block; font-size:0; white-space:nowrap; position:relative; }
@@ -36,6 +56,3 @@ $(".nav_h_list").touchFlow({
 	page : "li.on"
 });
 ```
-
-## Demo
-http://dohoons.com/test/touchFlow

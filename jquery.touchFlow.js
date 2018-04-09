@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.6.1
+ * @version	1.6.2
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -35,18 +35,7 @@
 	if (typeof define === 'function' && define.amd) {
 		define(['jquery'], factory);
 	} else if (typeof module === 'object' && module.exports) {
-		module.exports = function (root, jQuery) {
-			if (jQuery === undefined) {
-				if (typeof window !== 'undefined') {
-					jQuery = require('jquery');
-				}
-				else {
-					jQuery = require('jquery')(root);
-				}
-			}
-			factory(jQuery);
-			return jQuery;
-		};
+		module.exports = factory;
 	} else {
 		factory(jQuery);
 	}
