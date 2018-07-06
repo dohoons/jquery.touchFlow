@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.6.2
+ * @version	1.6.3
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -521,18 +521,14 @@
 			
 			if(this.wrapw < this.listw) {
 				this.right = -(this.listw - this.wrapw);
-			} else if(this.wrapw > this.listw) {
-				this.right = 0;
 			} else {
-				this.right = -this.listw;
+				this.right = 0;
 			}
 			
 			if(this.wraph < this.listh) {
 				this.bottom = -(this.listh - this.wraph);
-			} else if(this.wraph > this.listh) {
-				this.bottom = 0;
 			} else {
-				this.bottom = -this.listh;
+				this.bottom = 0;
 			}
 		},
 		
