@@ -29,7 +29,7 @@
 /* jslint node: true, jquery: true */
 /* globals define */
 
-(function (factory) {
+(function(factory) {
 	"use strict";
 
 	if (typeof define === 'function' && define.amd) {
@@ -39,12 +39,12 @@
 	} else {
 		factory(jQuery);
 	}
-}(function ($) {
+}(function($) {
 	"use strict";
 
 	var supportsCssTransitions = 'transition' in document.documentElement.style || 'WebkitTransition' in document.documentElement.style;
 	
-	var TouchFlow = function (el, settings){
+	var TouchFlow = function(el, settings) {
 		
 		var defaults = {
 			useMouse: true,
@@ -95,11 +95,11 @@
 
 	TouchFlow.prototype = {
 		
-		init: function () {
+		init: function() {
 			this.list = this.wrap.children();
 			this.state = false;
 			
-			if(typeof(this.opts.page) === "string") {
+			if(typeof this.opts.page === "string") {
 				this.opts.page = $(this.target).find(this.opts.page).eq(0).index();
 			}
 			
@@ -128,7 +128,7 @@
 				
 			$(window).off("resize", this, this.resize).on("resize", this, this.resize);
 			
-			this.list.find("a").on("click", this, function (e) {
+			this.list.find("a").on("click", this, function(e) {
 				if(!e.data.link) {
 					return false;
 				}
@@ -138,14 +138,14 @@
 				this.scrollbar_init();
 			}
 			
-			if(typeof(this.opts.initComplete) === "function") {
+			if(typeof this.opts.initComplete === "function") {
 				this.opts.initComplete.call(this, this.get_event_data());
 			}
 
 			return this;
 		},
 
-		scrollbar_init : function () {
+		scrollbar_init: function() {
 			if(this.scroll.wrap === undefined) {
 				this.scroll.wrap = $('<div class="touchflow-scrollbar"><div></div></div>');
 				this.scroll.bar = this.scroll.wrap.find(" > div");
@@ -155,7 +155,7 @@
 			}
 		},
 
-		scrollbar_pos : function (f) {
+		scrollbar_pos: function(f) {
 			if(this.opts.scrollbar) {
 				var wrap = this.scroll.wrap,
 					bar = this.scroll.bar,
@@ -198,7 +198,7 @@
 				}
 
 				if(this.opts.scrollbarAutoHide) {
-					setTimeout(function () {
+					setTimeout(function() {
 						if(f) {
 							wrap.css({
 								opacity : 0
@@ -209,7 +209,7 @@
 			}
 		},
 		
-		touchstart : function (e) {
+		touchstart: function(e) {
 			var obj = e.data;
 			var pos = $(this).position();
 			obj.startx = e.originalEvent.touches ? e.originalEvent.touches[0].pageX : e.pageX;
@@ -217,7 +217,7 @@
 			obj.posx = obj.startx - pos.left;
 			obj.posy = obj.starty - pos.top;
 			
-			if(typeof(obj.opts.stopped) === "function" && obj.speedx !== 0) {
+			if(typeof obj.opts.stopped === "function" && obj.speedx !== 0) {
 				obj.opts.stopped.call(obj, obj.get_event_data());
 			}
 			
@@ -242,7 +242,7 @@
 			}
 		},
 		
-		touchmove : function (e) {
+		touchmove: function(e) {
 			var obj = e.data,
 				pageX = e.originalEvent.touches ? e.originalEvent.touches[0].pageX : e.pageX,
 				pageY = e.originalEvent.touches ? e.originalEvent.touches[0].pageY : e.pageY,
@@ -281,7 +281,7 @@
 			e.stopPropagation();
 		},
 		
-		touchend : function (e) {
+		touchend: function(e) {
 			var obj = e.data,
 				pageX = obj.lastmove.originalEvent.touches ? obj.lastmove.originalEvent.touches[0].pageX : obj.lastmove.pageX,
 				pageY = obj.lastmove.originalEvent.touches ? obj.lastmove.originalEvent.touches[0].pageY : obj.lastmove.pageY,
@@ -314,7 +314,7 @@
 				obj.set_pos({y:to}, obj.duration);
 			}
 			
-			setTimeout(function () {
+			setTimeout(function() {
 				obj.link = true;
 			},50);
 			e.stopPropagation();
@@ -326,23 +326,23 @@
 			}
 		},
 		
-		transitionend : function (e) {
+		transitionend: function(e) {
 			var obj = e.data;
-			if(typeof(obj.opts.stopped) === "function") {
+			if(typeof obj.opts.stopped === "function") {
 				obj.opts.stopped.call(obj, obj.get_event_data());
 			}
 			obj.scrollbar_pos(true);
 		},
 		
-		resize : function (e) {
+		resize: function(e) {
 			var obj = e.data;
 			
 			clearTimeout(obj.tmp);
-			obj.tmp = setTimeout(function () {
+			obj.tmp = setTimeout(function() {
 				obj.set_limit();
 				obj.pos_control();
 				
-				if(typeof(obj.opts.resizeend) === "function") {
+				if(typeof obj.opts.resizeend === "function") {
 					obj.opts.resizeend.call(obj, obj.get_event_data());
 				}
 
@@ -350,7 +350,7 @@
 			}, 200);
 		},
 
-		wheel : function (e) {
+		wheel: function(e) {
 			var obj = e.data,
 				pos = 0,
 				chk = {},
@@ -387,7 +387,7 @@
 			obj.scrollbar_pos(true);
 		},
 
-		get_nearby_page : function (n) {
+		get_nearby_page: function(n) {
 			var pos = (typeof n === "number") ? Math.abs(n) : null,
 				arr = [],
 				list_pos = this.list.offset(),
@@ -414,7 +414,7 @@
 			return arr.indexOf(Math.min.apply(null, arr));
 		},
 
-		start_animation : function () {
+		start_animation: function() {
 			if(window.requestAnimationFrame) {
 				this.ticker = requestAnimationFrame(this.move.bind(this));
 			} else {
@@ -422,7 +422,7 @@
 			}
 		},
 
-		stop_animation : function () {
+		stop_animation: function() {
 			if(window.requestAnimationFrame) {
 				cancelAnimationFrame(this.ticker);
 			} else {
@@ -430,7 +430,7 @@
 			}
 		},
 		
-		move : function () {
+		move: function() {
 			var pos = this.list.position();
 			var thisx = pos.left,
 				thisy = pos.top;
@@ -452,7 +452,7 @@
 				} else if(abs_spdx < 1 && abs_spdy < 1) {
 					this.stop_animation();
 					
-					if(typeof(this.opts.stopped) === "function" && this.speedx !== 0) {
+					if(typeof this.opts.stopped === "function" && this.speedx !== 0) {
 						this.opts.stopped.call(this, this.get_event_data());
 					}
 
@@ -498,7 +498,7 @@
 			this.start_animation();
 		},
 		
-		limit_chk : function (obj) {
+		limit_chk: function(obj) {
 			if(obj.x !== undefined) {
 				return (obj.x > 0) === false && (obj.x < this.right) === false;
 			} else if(obj.y !== undefined) {
@@ -506,13 +506,13 @@
 			}
 		},
 		
-		set_limit : function () {
+		set_limit: function() {
 			var listw = 0,
 				listh = 0;
 			this.wrapw = this.wrap.width();
 			this.wraph = this.wrap.height();
 			
-			$(this.list.children()).each(function () {
+			$(this.list.children()).each(function() {
 				listw += $(this).outerWidth();
 				listh += $(this).outerHeight();
 			});
@@ -532,7 +532,7 @@
 			}
 		},
 		
-		get_limit : function (obj) {
+		get_limit: function(obj) {
 			if(obj.x !== undefined) {
 				if(obj.x > 0) {
 					obj.x = 0;
@@ -552,7 +552,7 @@
 			}
 		},
 		
-		go_page : function (page) {
+		go_page: function(page) {
 			var list_pos = this.list.offset(),
 				pos = this.list.children().map(function() {
 					return $(this).offset();
@@ -570,7 +570,7 @@
 			return this;
 		},
 		
-		view_page : function (page) {
+		view_page: function(page) {
 			this.opts.page = page;
 			var tg = this.list.children().eq(page);
 			
@@ -610,7 +610,7 @@
 			return this;
 		},
 		
-		pos_control : function () {
+		pos_control: function() {
 			var thisx = this.posX(),
 				thisy = this.posY(),
 				x_chk = this.limit_chk({x:thisx}),
@@ -631,7 +631,7 @@
 			}
 		},
 		
-		set_pos : function (obj, duration) {
+		set_pos: function(obj, duration) {
 			obj = $.extend({}, {x:0,y:0}, obj);
 
 			var style = (supportsCssTransitions) ? {
@@ -645,7 +645,7 @@
 			this.list.css(style);
 		},
 		
-		posX : function (val) {
+		posX: function(val) {
 			if(val !== undefined) {
 				var to = this.get_limit({x:val});
 				if(val == "first") {
@@ -661,7 +661,7 @@
 			return this.list.position().left;
 		},
 		
-		posY : function (val) {
+		posY: function(val) {
 			if(val !== undefined) {
 				var to = this.get_limit({y:val});
 				if(val == "first") {
@@ -677,7 +677,7 @@
 			return this.list.position().top;
 		},
 		
-		get_event_data : function () {
+		get_event_data: function() {
 			return {
 				obj : this,
 				target : this.target,
@@ -687,8 +687,8 @@
 		}
 	};
   
-	$.fn.touchFlow = function (settings) {
-		return this.each(function () {
+	$.fn.touchFlow = function(settings) {
+		return this.each(function() {
 			if (!$.data(this, 'touchFlow')) {
 				$.data(this, 'touchFlow', new TouchFlow( this, settings ));
 			}
