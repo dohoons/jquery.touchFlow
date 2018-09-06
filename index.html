@@ -50,59 +50,59 @@ $(document).ready(function() {
 	
 	// 1 : default(axis x). responsive(using css), callback test
 	$("#touchFlow").touchFlow({
-		initComplete : function (e) {
-			$("#throw_nav_debug").prepend('touchFlow init !!<br>');
+		initComplete: function(e) {
+			$("#throw_nav_debug").append('touchFlow init !!<br>');
 		},
-		stopped : function (e) {
-			$("#throw_nav_debug").prepend('touchFlow stopped. posX : ' + e.posX + ' !!<br>');
+		stopped: function(e) {
+			$("#throw_nav_debug").append('touchFlow stopped. posX : ' + e.posX + ' !!<br>');
 		},
-		resizeend : function (e) {
-			$("#throw_nav_debug").prepend('Window resizeend. listW : ' + this.listw + ' !!<br>');
+		resizeend: function(e) {
+			$("#throw_nav_debug").append('Window resizeend. listW : ' + this.listw + ' !!<br>');
 		}
 	});
 	
-	$(".btn_first").on("click", function (e) {
+	$(".btn_first").on("click", function(e) {
 		$("#touchFlow").data("touchFlow").posX("first");
 	});
-	$(".btn_last").on("click", function (e) {
+	$(".btn_last").on("click", function(e) {
 		$("#touchFlow").data("touchFlow").posX("last");
 	});
-	$(".btn_to230").on("click", function (e) {
+	$(".btn_to230").on("click", function(e) {
 		$("#touchFlow").data("touchFlow").posX(-230);
 	});
 	
 	// 2 : axis:x, page:'li.on' index
 	$("#touchFlow2").touchFlow({
-		axis : "x",
-		page : $("#touchFlow2 li.on").index()
+		axis: "x",
+		page: $("#touchFlow2 li.on").index()
 	});
 	
 	// 3 : axis:y, page:selector string
 	$("#touchFlow3").touchFlow({
-		axis : "y",
-		page : "li.on",
-		scrollbar : true
+		axis: "y",
+		page: "li.on",
+		scrollbar: true
 	});
 	
 	// 4 : axis:x, scrollbar:true, scrollbarAutoHide:false, apply multiple elements
 	$(".nav_h_list").touchFlow({
-		axis : "x",
-		page : "li.on",
-		scrollbar : true,
-		scrollbarAutoHide : false
+		axis: "x",
+		page: "li.on",
+		scrollbar: true,
+		scrollbarAutoHide: false
 	});
 	
 	// 5 : axis:x, scrollbar:true, snap:true
 	$("#touchFlow5").touchFlow({
-		axis : "x",
-		snap : true,
-		scrollbar : true
+		axis: "x",
+		snap: true,
+		scrollbar: true
 	});
 	
 	// 6 : axis:y, scrollbar:true
 	$("#touchFlow6").touchFlow({
-		axis : "y",
-		scrollbar : true
+		axis: "y",
+		scrollbar: true
 	});
 });
 //]]>
@@ -137,7 +137,7 @@ $(document).ready(function() {
 	<button type="button" class="btn_to230">posX(-230);</button>
 </div>
 callback log :
-<div id="throw_nav_debug" style="border:1px solid #ccc; height:50px; line-height:1; font-size:11px; overflow:scroll; overflow-x:hidden;"></div>
+<div id="throw_nav_debug" style="display: flex; flex-direction: column-reverse; border:1px solid #ccc; height:50px; line-height:1; font-size:11px; overflow:scroll; overflow-x:hidden;"></div>
 
 <h2>2 : axis:x, page:'li.on' index</h2>
 <div id="touchFlow2" class="nav_h_type">
