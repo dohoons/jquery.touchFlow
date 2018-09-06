@@ -312,6 +312,10 @@
 				}
 				obj.stop_animation();
 				obj.set_pos({y:to}, obj.duration);
+			} else {
+				if(typeof obj.opts.stopped === "function") {
+					obj.opts.stopped.call(obj, obj.get_event_data());
+				}
 			}
 			
 			setTimeout(function() {
