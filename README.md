@@ -62,6 +62,7 @@ $(".nav_h_list").touchFlow({
 | Option Name | Defaut | Description |
 | --- | --- | --- |
 | useMouse | true | 마우스 드래그 사용 |
+| useWheel | true | 휠스크롤 사용 |
 | axis | 'x' | 드래그 방향 ('x','y') |
 | page | 0 | 초기 페이지 (아이템 인덱스 숫자 or CSS 셀렉터 문자열) |
 | speed | 200 | 애니메이션 속도 (ms) |

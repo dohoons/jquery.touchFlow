@@ -7,6 +7,7 @@
  *
  * @param Object	settings	환경변수 오브젝트
  *		useMouse			-	마우스 드래그 사용 (default true)
+ *		useWheel			-	휠스크롤 사용 (default true)
  *		axis				-	드래그 방향 (String, default "x")
  *		page				-	초기 페이지 (Number or String, default 0)
  *		speed				-	애니메이션 속도 (Number, default 200)
@@ -48,6 +49,7 @@
 		
 		var defaults = {
 			useMouse: true,
+			useWheel: true,
 			axis : "x",
 			page : 0,
 			speed : 200,
@@ -359,6 +361,10 @@
 				pos = 0,
 				chk = {},
 				gap = 100;
+
+			if(obj.opts.useWheel === false) {
+				return true;
+			}
 			
 			if(e.originalEvent.deltaY > 0) {
 				if(obj.opts.axis === "x") {
