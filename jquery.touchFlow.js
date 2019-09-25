@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.6.4
+ * @version	1.6.5
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -130,11 +130,12 @@
 				
 			$(window).off("resize", this, this.resize).on("resize", this, this.resize);
 			
-			this.list.find("a").on("click", this, function(e) {
-				if(!e.data.link) {
-					return false;
+			this.target.addEventListener('click', function(e) {
+				if(!this.link) {
+					e.stopPropagation();
+					e.preventDefault();
 				}
-			});
+			}.bind(this), true);
 
 			if(this.opts.scrollbar) {
 				this.scrollbar_init();
