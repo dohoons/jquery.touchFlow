@@ -2,7 +2,7 @@
  * @name	jQuery.touchFlow
  * @author	dohoons ( http://dohoons.com/ )
  *
- * @version	1.6.6
+ * @version	1.6.7
  * @since	201602
  *
  * @param Object	settings	환경변수 오브젝트
@@ -134,7 +134,6 @@
 
 			this.target.removeEventListener('click', this._containerClickHandler || function() {}, true);
 			this._containerClickHandler = function(e) {
-				console.log(111)
 				if(!_this.link) {
 					e.stopPropagation();
 					e.preventDefault();
