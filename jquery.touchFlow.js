@@ -98,6 +98,8 @@
 	TouchFlow.prototype = {
 		
 		init: function() {
+			var _this = this;
+			
 			this.list = this.wrap.children();
 			this.state = false;
 			
@@ -129,13 +131,16 @@
 			}
 				
 			$(window).off("resize", this, this.resize).on("resize", this, this.resize);
-			
-			this.target.addEventListener('click', function(e) {
-				if(!this.link) {
+
+			this.target.removeEventListener('click', this._containerClickHandler || function() {}, true);
+			this._containerClickHandler = function(e) {
+				console.log(111)
+				if(!_this.link) {
 					e.stopPropagation();
 					e.preventDefault();
 				}
-			}.bind(this), true);
+			};
+			this.target.addEventListener('click', this._containerClickHandler, true);
 
 			if(this.opts.scrollbar) {
 				this.scrollbar_init();
